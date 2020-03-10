@@ -42,21 +42,24 @@ document.onmouseout = () => {
 
 
 
-const $list = document.querySelector('.list');
+const $list = document.querySelectorAll('.list');
 
-for (const li of $list.querySelectorAll('li')) {
-  const span = document.createElement('span');
-  li.prepend(span);
-  span.append(span.nextSibling);
-}
-
-$list.onclick = (event) => {
-  if (event.target.tagName !== 'SPAN') {
-    return;
+$list.forEach(element => {
+  for (const li of element.querySelectorAll('li')) {
+    const span = document.createElement('span');
+    li.prepend(span);
+    span.append(span.nextSibling);
   }
 
-  const childrenContainer = event.target.parentNode.querySelector('ul');
-  if (!childrenContainer) return;
+  element.onclick = (event) => {
+    if (event.target.tagName !== 'SPAN') {
+      return;
+    }
 
-  childrenContainer.hidden = !childrenContainer.hidden;
-};
+    const childrenContainer = event.target.parentNode.querySelector('ul');
+    if (!childrenContainer) return;
+
+    childrenContainer.hidden = !childrenContainer.hidden;
+  };
+});
+
