@@ -1,51 +1,48 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-magic-numbers */
 
 let tooltip;
 
 function showTip (parent, text) {
   const offset = 5;
-  const tip = document.createElement('span');
-  tip.className = 'tip';
-  tip.textContent = text;
-  document.body.append(tip);
+  const textContent = text;
+  const coordinates = $(parent).offset();
+  const tip = $('<span>');
 
-  const coordinates = parent.getBoundingClientRect();
+  $('body').append(tip);
+  $(tip).addClass('tip');
+  $(tip).text(textContent);
 
-  let left = coordinates.left + (parent.offsetWidth - tip.offsetWidth) / 2;
-  if (left < 0) left = 0;
+  let positionLeft = coordinates.left + ($(parent).outerWidth() - tip.outerWidth()) / 2;
+  if (positionLeft < 0) positionLeft = 0;
 
-  let top = coordinates.top - tip.offsetHeight - offset;
-  if (top < 0) {
-    top = coordinates.top + parent.offsetHeight + offset;
-  }
+  let positionTop = coordinates.top - tip.outerHeight() - offset;
+  if (positionTop < 0) { positionTop = coordinates.top + $(parent).outerHeight() + offset; }
 
-  tip.style.left = left + 'px';
-  tip.style.top = top + 'px';
+  $(tip).css({'left': positionLeft, 'top': positionTop});
 
   return tip;
 }
 
-document.onmouseover = (event) => {
-  const parent = event.target.closest('[data-tooltip]');
+$('[data-tooltip]').mouseover((event) => {
+  const parent = event.target;
 
   if (!parent) return;
 
   tooltip = showTip(parent, parent.dataset.tooltip);
-};
+});
 
-document.onmouseout = () => {
+$('[data-tooltip]').mouseleave(() => {
   if (tooltip) {
     tooltip.remove();
     tooltip = false;
   }
-};
+});
 
+const $list = $('.list');
 
-
-const $list = document.querySelectorAll('.list');
-
-$list.forEach(element => {
-  for (const li of element.querySelectorAll('li')) {
+$list.each((index, element) => {
+  for (const li of $list) {
     const span = document.createElement('span');
     li.prepend(span);
     span.append(span.nextSibling);
@@ -62,4 +59,3 @@ $list.forEach(element => {
     childrenContainer.hidden = !childrenContainer.hidden;
   };
 });
-

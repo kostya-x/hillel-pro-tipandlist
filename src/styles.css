@@ -16,3 +16,7 @@
 .list span:hover {
   font-weight: bold;
 }
+
+.active-tab-btn {
+  border: solid 1px blue;
+}
